@@ -7,36 +7,41 @@ import (
 
 type ListOrdersUseCase struct {
 	OrderRepository entity.OrderRepositoryInterface
-	OrderCreated    events.EventInterface
+	OrderList       events.EventInterface
 	EventDispatcher events.EventDispatcherInterface
 }
 
 func NewListOrdersUseCase(
 	OrderRepository entity.OrderRepositoryInterface,
-	OrderCreated events.EventInterface,
+	OrderList events.EventInterface,
 	EventDispatcher events.EventDispatcherInterface,
-) *CreateOrderUseCase {
-	return &CreateOrderUseCase{
+) *ListOrdersUseCase {
+	return &ListOrdersUseCase{
 		OrderRepository: OrderRepository,
-		OrderCreated:    OrderCreated,
+		OrderList:       OrderList,
 		EventDispatcher: EventDispatcher,
 	}
 }
 
-func (c *ListOrdersUseCase) Execute() ([]OrderOutputDTO, error) {
-	/*if err := c.OrderRepository.Save()(&order); err != nil {
-		return OrderOutputDTO{}, err
+func (c *ListOrdersUseCase) Execute() ([]*OrderOutputDTO, error) {
+	orders, err := c.OrderRepository.ListOrders()
+	if err != nil {
+		return []*OrderOutputDTO{}, err
 	}
 
-	dto := OrderOutputDTO{
-		ID:         order.ID,
-		Price:      order.Price,
-		Tax:        order.Tax,
-		FinalPrice: order.Price + order.Tax,
+	var orderDTOs []*OrderOutputDTO
+	for _, order := range orders {
+		orderDTO := &OrderOutputDTO{
+			ID:         order.ID,
+			Price:      order.Price,
+			Tax:        order.Tax,
+			FinalPrice: order.FinalPrice,
+		}
+		orderDTOs = append(orderDTOs, orderDTO)
 	}
 
-	c.OrderCreated.SetPayload(dto)
-	c.EventDispatcher.Dispatch(c.OrderCreated)*/
+	c.OrderList.SetPayload(orderDTOs)
+	c.EventDispatcher.Dispatch(c.OrderList)
 
-	return []OrderOutputDTO{}, nil
+	return orderDTOs, nil
 }

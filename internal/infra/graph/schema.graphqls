@@ -6,11 +6,15 @@ type Order {
 }
 
 input OrderInput {
-    id : String!
+    id: String!
     Price: Float!
     Tax: Float!
 }
 
 type Mutation {
     createOrder(input: OrderInput): Order
+}
+
+type Query {
+    listOrders: [Order!]!
 }
