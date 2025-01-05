@@ -38,14 +38,14 @@ make up
 ``` shell
 ## criar nova order
 evans --proto internal/infra/grpc/protofiles/order.proto --host localhost --port 50051
-=> call CreateOrder
-=> 2
-=> 10.5
-=> 0.5
+> call CreateOrder
+> 2
+> 2.1
+> 0.2
 
 ## listar orders
 evans --proto internal/infra/grpc/protofiles/order.proto --host localhost --port 50051
-=> call ListOrders
+> call ListOrders
 ```
 
 4. Testar aplicação: GraphQL server
