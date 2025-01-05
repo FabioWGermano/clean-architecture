@@ -12,6 +12,7 @@ import (
 	"github.com/FabioWGermano/clean-architecture/internal/infra/web"
 	"github.com/FabioWGermano/clean-architecture/internal/usecase"
 	"github.com/FabioWGermano/clean-architecture/pkg/events"
+
 	"github.com/google/wire"
 )
 
@@ -27,6 +28,7 @@ var setEventDispatcherDependency = wire.NewSet(
 	wire.Bind(new(events.EventDispatcherInterface), new(*events.EventDispatcher)),
 )
 
+// ----- CREATE
 var setOrderCreatedEvent = wire.NewSet(
 	event.NewOrderCreated,
 	wire.Bind(new(events.EventInterface), new(*event.OrderCreated)),
@@ -41,15 +43,6 @@ func NewCreateOrderUseCase(db *sql.DB, eventDispatcher events.EventDispatcherInt
 	return &usecase.CreateOrderUseCase{}
 }
 
-func NewListOrdersUseCase(db *sql.DB, eventDispatcher events.EventDispatcherInterface) *usecase.ListOrdersUseCase {
-	wire.Build(
-		setOrderRepositoryDependency,
-		setOrderCreatedEvent,
-		usecase.NewListOrdersUseCase,
-	)
-	return &usecase.ListOrdersUseCase{}
-}
-
 func NewWebOrderHandler(db *sql.DB, eventDispatcher events.EventDispatcherInterface) *web.WebOrderHandler {
 	wire.Build(
 		setOrderRepositoryDependency,
@@ -57,4 +50,14 @@ func NewWebOrderHandler(db *sql.DB, eventDispatcher events.EventDispatcherInterf
 		web.NewWebOrderHandler,
 	)
 	return &web.WebOrderHandler{}
+}
+
+// ----- LIST
+func NewListOrderUseCase(db *sql.DB, eventDispatcher events.EventDispatcherInterface) *usecase.ListOrderUseCase {
+	wire.Build(
+		setOrderRepositoryDependency,
+		setOrderCreatedEvent,
+		usecase.NewListOrderUseCase,
+	)
+	return &usecase.ListOrderUseCase{}
 }

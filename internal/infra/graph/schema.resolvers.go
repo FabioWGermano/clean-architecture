@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/FabioWGermano/clean-architecture/internal/infra/graph/model"
 	"github.com/FabioWGermano/clean-architecture/internal/usecase"
@@ -30,29 +31,39 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input *model.OrderIn
 	}, nil
 }
 
-// ListOrders is the resolver for the listOrders field.
+// ListOrders is the resolver for the ListOrders field.
 func (r *queryResolver) ListOrders(ctx context.Context) ([]*model.Order, error) {
-	output, err := r.ListOrdersUseCase.Execute()
+	output, err := r.ListOrderUseCase.Execute()
 	if err != nil {
 		return nil, err
 	}
-
 	var orders []*model.Order
-	for _, o := range output {
+	for _, order := range output {
 		orders = append(orders, &model.Order{
-			ID:         o.ID,
-			Price:      o.Price,
-			Tax:        o.Tax,
-			FinalPrice: o.FinalPrice,
+			ID:         order.ID,
+			Price:      float64(order.Price),
+			Tax:        float64(order.Tax),
+			FinalPrice: float64(order.FinalPrice),
 		})
 	}
-
 	return orders, nil
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-func (r *Resolver) Query() QueryResolver       { return &queryResolver{r} }
+
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
+	panic(fmt.Errorf("not implemented: Orders - orders"))
+}

@@ -1,39 +1,76 @@
 # clean-architecture
 
 Projeto contendo o exercício Clean-Architecture do curso Go-Experts.
-Nesse projeto buscamos informações de cep em dois serviços diferentes em multithreading e devolvemos o mais rapido como resultado
+API criar e listar ordens de serviço, informando preço e taxa, retornando preço final.
+
+## Requisitos
+- [x] API deve conter servidor REST, GraphQL e gRPC.
+    - [x] Endpoint REST (GET /order)
+    - [x] Service ListOrders com GRPC
+    - [x] Query ListOrders GraphQL
+- [x] Requests para criar e listar orders no arquivo api.http
+- [x] Migrações necessárias
+- [x] Usar docker e docker-compose e executar em containers
+- [x] Documentar projeto e como executá-lo
 
 ## Tecnologias Utilizadas
 
-- Visual Studio
-- Golang
+- wire
+- viper
+- testify
+- amqp(rabbitmq)
+- net/http, grpc, graphql
+- mysql
 
 ## Instalação
 
-- Baixar e configurar o docker
-- Baixar o projeto https://github.com/fabiowgermano/clean-architecture
-- Executar o comando `docker-compose up -d` para criar a imagem do banco de dados no docker
-- Executar o comando `make migrate` pra criar a tabela e alguns dados de testes
+1. Instale as dependências e suba os containers
+``` shell
+make install
+make up
+```
 
-- Acessar a pasta ordersystem com o comando `cd cmd/ordersystem` e executar o comando `go run main.go wire_gen.go` para iniciar a aplicação
+2. Como testar a aplicação: REST API server
+- faça uma chamada POST para criar uma nova order via rest-client usando o arquivo [api.http](api/api.http)
+- faça uma chamada GET para listar as orders via rest-client usando o arquivo [api.http](api/api.http)
 
-- Para acessar a aplicação graphQL - http://localhost:8080/
-    - Listar as Orders que foram cadastradas no banco de dados:
-        query orders {
-            listOrders{
-                id,
-                Price,
-                Tax,
-                FinalPrice
-            }
-        }
-    - Adicionar nova Order:
-        mutation createOrder {
-            createOrder(input: {id: "1", Price:2.0, Tax:3.0}) {id}
-        }
+3. Como testar a aplicação: gRPC server
+``` shell
+## criar nova order
+evans --proto internal/infra/grpc/protofiles/order.proto --host localhost --port 50051
+=> call CreateOrder
+=> 2
+=> 10.5
+=> 0.5
 
-- Executar a listagem de orders por serviço `curl --location --request GET 'http://localhost:8000/order'`
-- Executar a criação de uma order por serviço `curl --location 'http://localhost:8000/order' --header 'Content-Type: application/json' --data '{"id": "4","price": 4,"tax": 4}'`
+## listar orders
+evans --proto internal/infra/grpc/protofiles/order.proto --host localhost --port 50051
+=> call ListOrders
+```
 
+4. Testar aplicação: GraphQL server
+``` shell
+## criar nova order
+mutation createOrder {
+  createOrder(input: {id:"1", Price: 1.1, Tax: 0.1}) {
+    id
+    Price
+    Tax
+  }
+}
 
-Executar com o comando "go run cmd/main.go"
+## listar orders
+query queryOrders {
+  listOrders {
+    id
+    Price
+    Tax
+    FinalPrice
+  }
+}
+```
+
+5. Baixar containers 
+``` shell
+make down
+```

@@ -3,24 +3,24 @@ package service
 import (
 	"context"
 
-	"github.com/FabioWGermano/clean-architecture/internal/infra/grpc/pb"
+	"github.com/FabioWGermano/clean-architecture/internal/infra/grpc/pb" // Ensure this path is correct and the package exists
 	"github.com/FabioWGermano/clean-architecture/internal/usecase"
 )
 
 type OrderService struct {
 	pb.UnimplementedOrderServiceServer
 	CreateOrderUseCase usecase.CreateOrderUseCase
-	ListOrdersUseCase  usecase.ListOrdersUseCase
+	ListOrderUserCase  usecase.ListOrderUseCase
 }
 
-func NewOrderService(createOrderUseCase usecase.CreateOrderUseCase, listOrdersUseCase usecase.ListOrdersUseCase) *OrderService {
+func NewOrderService(createOrderUseCase usecase.CreateOrderUseCase, listOrderUseCase usecase.ListOrderUseCase) *OrderService {
 	return &OrderService{
 		CreateOrderUseCase: createOrderUseCase,
-		ListOrdersUseCase:  listOrdersUseCase,
+		ListOrderUserCase:  listOrderUseCase,
 	}
 }
 
-func (s *OrderService) CreateOrder(ctx context.Context, in *pb.CreateOrderRequest) (*pb.CreateOrderResponse, error) {
+func (s *OrderService) CreateOrder(ctx context.Context, in *pb.CreateOrderRequest) (*pb.OrderResponse, error) {
 	dto := usecase.OrderInputDTO{
 		ID:    in.Id,
 		Price: float64(in.Price),
@@ -30,7 +30,7 @@ func (s *OrderService) CreateOrder(ctx context.Context, in *pb.CreateOrderReques
 	if err != nil {
 		return nil, err
 	}
-	return &pb.CreateOrderResponse{
+	return &pb.OrderResponse{
 		Id:         output.ID,
 		Price:      float32(output.Price),
 		Tax:        float32(output.Tax),
@@ -38,21 +38,19 @@ func (s *OrderService) CreateOrder(ctx context.Context, in *pb.CreateOrderReques
 	}, nil
 }
 
-func (s *OrderService) ListOrders(ctx context.Context, in *pb.ListOrdersRequest) (*pb.ListOrdersResponse, error) {
-	orders, err := s.ListOrdersUseCase.Execute()
+func (s *OrderService) ListOrders(ctx context.Context, in *pb.Blank) (*pb.ListOrdersResponse, error) {
+	output, err := s.ListOrderUserCase.Execute()
 	if err != nil {
 		return nil, err
 	}
-	var ordersResponse []*pb.CreateOrderResponse
-	for _, order := range orders {
-		ordersResponse = append(ordersResponse, &pb.CreateOrderResponse{
+	var orders []*pb.OrderResponse
+	for _, order := range output {
+		orders = append(orders, &pb.OrderResponse{
 			Id:         order.ID,
 			Price:      float32(order.Price),
 			Tax:        float32(order.Tax),
 			FinalPrice: float32(order.FinalPrice),
 		})
 	}
-	return &pb.ListOrdersResponse{
-		Orders: ordersResponse,
-	}, nil
+	return &pb.ListOrdersResponse{Orders: orders}, nil
 }
