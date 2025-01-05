@@ -48,7 +48,11 @@ evans --proto internal/infra/grpc/protofiles/order.proto --host localhost --port
 > call ListOrders
 ```
 
-4. Testar aplicação: GraphQL server
+4. Testar aplicação: GraphQL server 
+``` shell
+http://localhost:8080/
+```
+
 ``` shell
 ## criar nova order
 mutation createOrder {
