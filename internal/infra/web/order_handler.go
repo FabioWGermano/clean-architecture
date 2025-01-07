@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/FabioWGermano/clean-architecture/internal/entity"
-	"github.com/FabioWGermano/clean-architecture/internal/usecase"
-	"github.com/FabioWGermano/clean-architecture/pkg/events"
+	"github.com/fabiowgermano/clean-architecture/internal/entity"
+	"github.com/fabiowgermano/clean-architecture/internal/usecase"
+	"github.com/fabiowgermano/clean-architecture/pkg/events"
 )
 
 type WebOrderHandler struct {

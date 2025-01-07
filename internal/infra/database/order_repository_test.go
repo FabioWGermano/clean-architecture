@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/FabioWGermano/clean-architecture/internal/entity"
+	"github.com/fabiowgermano/clean-architecture/internal/entity"
 
 	"github.com/stretchr/testify/suite"
 

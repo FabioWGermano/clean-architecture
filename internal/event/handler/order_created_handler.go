@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/FabioWGermano/clean-architecture/pkg/events"
+	"github.com/fabiowgermano/clean-architecture/pkg/events"
 	"github.com/streadway/amqp"
 )
 

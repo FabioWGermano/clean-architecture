@@ -1,6 +1,6 @@
 package graph
 
-import "github.com/FabioWGermano/clean-architecture/internal/usecase"
+import "github.com/fabiowgermano/clean-architecture/internal/usecase"
 
 // This file will not be regenerated automatically.
 //

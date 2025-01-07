@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/FabioWGermano/clean-architecture/internal/infra/grpc/pb" // Ensure this path is correct and the package exists
-	"github.com/FabioWGermano/clean-architecture/internal/usecase"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/grpc/pb" // Ensure this path is correct and the package exists
+	"github.com/fabiowgermano/clean-architecture/internal/usecase"
 )
 
 type OrderService struct {

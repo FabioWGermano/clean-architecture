@@ -6,12 +6,12 @@ package main
 import (
 	"database/sql"
 
-	"github.com/FabioWGermano/clean-architecture/internal/entity"
-	"github.com/FabioWGermano/clean-architecture/internal/event"
-	"github.com/FabioWGermano/clean-architecture/internal/infra/database"
-	"github.com/FabioWGermano/clean-architecture/internal/infra/web"
-	"github.com/FabioWGermano/clean-architecture/internal/usecase"
-	"github.com/FabioWGermano/clean-architecture/pkg/events"
+	"github.com/fabiowgermano/clean-architecture/internal/entity"
+	"github.com/fabiowgermano/clean-architecture/internal/event"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/database"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/web"
+	"github.com/fabiowgermano/clean-architecture/internal/usecase"
+	"github.com/fabiowgermano/clean-architecture/pkg/events"
 
 	"github.com/google/wire"
 )

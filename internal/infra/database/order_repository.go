@@ -3,7 +3,7 @@ package database
 import (
 	"database/sql"
 
-	"github.com/FabioWGermano/clean-architecture/internal/entity"
+	"github.com/fabiowgermano/clean-architecture/internal/entity"
 )
 
 type OrderRepository struct {

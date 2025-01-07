@@ -8,8 +8,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/FabioWGermano/clean-architecture/internal/infra/graph/model"
-	"github.com/FabioWGermano/clean-architecture/internal/usecase"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/graph/model"
+	"github.com/fabiowgermano/clean-architecture/internal/usecase"
 )
 
 // CreateOrder is the resolver for the createOrder field.

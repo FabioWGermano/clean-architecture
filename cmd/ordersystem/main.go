@@ -8,13 +8,13 @@ import (
 
 	graphql_handler "github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/FabioWGermano/clean-architecture/configs"
-	"github.com/FabioWGermano/clean-architecture/internal/event/handler"
-	"github.com/FabioWGermano/clean-architecture/internal/infra/graph"
-	"github.com/FabioWGermano/clean-architecture/internal/infra/grpc/pb"
-	"github.com/FabioWGermano/clean-architecture/internal/infra/grpc/service"
-	"github.com/FabioWGermano/clean-architecture/internal/infra/web/webserver"
-	"github.com/FabioWGermano/clean-architecture/pkg/events"
+	"github.com/fabiowgermano/clean-architecture/configs"
+	"github.com/fabiowgermano/clean-architecture/internal/event/handler"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/graph"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/grpc/pb"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/grpc/service"
+	"github.com/fabiowgermano/clean-architecture/internal/infra/web/webserver"
+	"github.com/fabiowgermano/clean-architecture/pkg/events"
 	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -26,6 +26,8 @@ import (
 func main() {
 	// ----- CONFIGS
 	configs, err := configs.LoadConfig(".")
+	print(configs)
+
 	if err != nil {
 		panic(err)
 	}

@@ -58,7 +58,7 @@ test: ## Run unit-tests
 
 .PHONY: build
 build: ## Build the container image
-	@docker build -t goexpert-cleanarch:dev -f Dockerfile .
+	@docker build -t github.com/fabiowgermano/clean-architecture:dev -f Dockerfile .
 
 .PHONY: up
 up: ## Put the compose containers up
@@ -70,5 +70,5 @@ down: ## Put the compose containers down
 
 .PHONY: serve
 serve: ## Run the rest-api, grpc and graphql servers
-	@cd cmd/orders && go run main.go wire_gen.go
+	@cd cmd/ordersystem && go run main.go wire_gen.go
 	@cd -

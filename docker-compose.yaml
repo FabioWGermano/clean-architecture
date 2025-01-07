@@ -1,7 +1,6 @@
-version: '3'
-
 services:
   mysql:
+    hostname: mysql
     image: mysql:5.7
     container_name: mysql
     restart: always
@@ -9,21 +8,63 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: orders
       MYSQL_PASSWORD: root
+      MYSQL_USER: root
     ports:
       - 3306:3306
     volumes:
       - .docker/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      start_period: 10s
+      interval: 10s
+      timeout: 10s
+      retries: 3
 
   rabbitmq:
+    hostname: rabbitmq
     image: rabbitmq:3-management
     container_name: rabbitmq
     restart: always
     ports:
       - 5672:5672
       - 15672:15672
+      - 15692:15692
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      start_period: 10s
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orders
+      MYSQL_PASSWORD: root
+      MYSQL_USER: root
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      RMQ_URL: amqp://guest:guest@rabbitmq:5672/
+    ports:
+      - 8000:8000
+      - 8080:8080
+      - 50051:50051
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: ["/main"]
 
   migrations:
     hostname: migrations
@@ -31,10 +72,13 @@ services:
     restart: no
     image: migrate/migrate:latest
     environment:
-      MYSQL_DATABASE: orders
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orders
+      MYSQL_PASSWORD: root
+      MYSQL_USER: root
     volumes:
       - ./internal/infra/sql/migrations:/migrations
     command: -path=/migrations -database "mysql://root:root@tcp(mysql:3306)/orders" -verbose up
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy

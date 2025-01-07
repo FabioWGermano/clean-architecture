@@ -1,4 +1,4 @@
-module github.com/FabioWGermano/clean-architecture
+module github.com/fabiowgermano/clean-architecture
 
 go 1.23
 
