@@ -22,11 +22,23 @@ API criar e listar ordens de serviço, informando preço e taxa, retornando pre�
 - net/http, grpc, graphql
 - mysql
 
-## Instalação
+## Pré Instalação
 
-1. Instale as dependências e suba os containers
+1. Preparar o ambiente configurando o docker na maquina
+
+2. Garanta que o Migrate e Evans estejam pré instalados na build do Go
 ``` shell
 make install
+```
+
+## Instalação/Execução
+
+1. Executar o comando abaixo para criação e execução do banco de dados, rabbitmq e aplicação nos containers
+``` shell
+docker-compose up
+```
+ou
+``` shell
 make up
 ```
 
