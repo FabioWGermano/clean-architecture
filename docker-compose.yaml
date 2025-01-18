@@ -8,7 +8,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: orders
       MYSQL_PASSWORD: root
-      MYSQL_USER: root
     ports:
       - 3306:3306
     volumes:
