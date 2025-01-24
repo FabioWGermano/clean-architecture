@@ -1,4 +1,4 @@
-FROM golang:1.23
+FROM golang:1.23.3
 
 WORKDIR /app
 
@@ -8,9 +8,6 @@ RUN go mod download
 COPY . .
 
 WORKDIR /app/cmd/ordersystem
-
-# Instale o netcat
-# RUN apt-get update && apt-get install -y netcat-openbsd
 
 RUN go build -o /main main.go wire_gen.go
 
